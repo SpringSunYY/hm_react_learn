@@ -356,6 +356,7 @@ function App(){
 2. 删除评论实现
 3. 渲染导航Tab和高亮实现
 4. 评论列表排序功能实现
+5. https://www.lodashjs.com/  js工具
 
 ### 基础模版
 

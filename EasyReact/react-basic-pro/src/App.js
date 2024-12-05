@@ -1,6 +1,8 @@
 import './App.scss'
 import avatar from './images/bozai.png'
 import {useState} from "react";
+import {orderBy} from "lodash";
+import classNames from "classnames";
 
 /**
  * 评论列表的渲染和操作
@@ -75,10 +77,31 @@ const tabs = [
 ]
 
 const App = () => {
-    const [list, setList] = useState(defaultList)
+    const [list, setList] = useState(orderBy(defaultList, 'like', 'desc'))
     const onDelete = rpid => {
         console.log('删除评论', rpid)
-        setList(list.filter(item => item.rpid !== rpid))
+        setList(list.filter(item => {
+            console.log(item.rpid, rpid)
+            if (item.rpid !== rpid) {
+                return true
+            }
+        }))
+    }
+
+    // 导航 Tab 高亮的状态
+    const [activeTab, setActiveTab] = useState('hot')
+    const onToggle = type => {
+        setActiveTab(type)
+        let newList
+        if (type === 'time') {
+            // 按照时间降序排序
+            // orderBy(对谁进行排序, 按照谁来排, 顺序)
+            newList = orderBy(list, 'ctime', 'desc')
+        } else {
+            // 按照喜欢数量降序排序
+            newList = orderBy(list, 'like', 'desc')
+        }
+        setList(newList)
     }
     return (
         <div className="app">
@@ -92,8 +115,18 @@ const App = () => {
                     </li>
                     <li className="nav-sort">
                         {/* 高亮类名： active */}
-                        <span className='nav-item'>最新</span>
-                        <span className='nav-item'>最热</span>
+                        {/* 高亮类名： active */}
+                        {tabs.map(item => {
+                            return (
+                                <div
+                                    key={item.type}
+                                    // className={item.type === activeTab ? 'nav-item active' : 'nav-item'}
+                                    className={classNames('nav-item', {active: item.type === activeTab})}
+                                    onClick={() => onToggle(item.type)}
+                                >{item.text}
+                                </div>
+                            )
+                        })}
                     </li>
                 </ul>
             </div>
@@ -122,8 +155,8 @@ const App = () => {
                 {/* 评论列表 */}
                 <div className="reply-list">
                     {/* 评论项 */}
-                    {defaultList.map(item => (
-                        <div key={item.id} className="reply-item">
+                    {list.map(item => (
+                        <div key={item.rpid} className="reply-item">
                             {/* 头像 */}
                             <div className="root-reply-avatar">
                                 <div className="bili-avatar">
