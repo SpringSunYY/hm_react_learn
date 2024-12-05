@@ -284,6 +284,7 @@ function App(){
 
 ```jsx
 function App(){
+   // 定义状态 count状态变量 setCount函数
   const [ count, setCount ] = React.useState(0)
   return (
     <div>
@@ -304,6 +305,22 @@ function App(){
 > 对于对象类型的状态变量，应该始终给set方法一个`全新的对象` 来进行修改
 
 ![image.png](./assets/day1_10.png)
+
+```react
+    //修改对象状态
+    const [from, setFrom] = useState({name: '小猜', age: 18})
+    const handlerClickFrom = () => ({
+        ...from,
+        age: 22
+    })
+```
+
+
+```react
+       <div>
+            <button onClick={() => setFrom(handlerClickFrom())}>{from.age}</button>
+        </div>
+```
 
 ### 组件的基础样式处理
 
