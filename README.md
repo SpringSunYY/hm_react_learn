@@ -1090,6 +1090,7 @@ function App(){
 
 ```jsx
 function Son(props){
+  //props 对象里面包含所有父组件传输过来的数据  
   return <div>{ props.name }</div>
 }
 

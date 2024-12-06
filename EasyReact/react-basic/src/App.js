@@ -1,5 +1,5 @@
 //项目根组件
-import React, {useState} from 'react';
+import React, {createContext, useContext, useEffect, useRef, useState} from 'react';
 import './index.css';
 
 const xc = '乖乖'
@@ -35,7 +35,21 @@ function Button() {
     return <button>click me</button>
 }
 
+const MsgContext = createContext()
+
+const URL = 'http://geek.itheima.net/v1_0/channels'
+
 function App() {
+    useEffect(() => {
+        //获取频道列表
+        async function getList() {
+            const res = await fetch(URL)
+            const list = await res.json()
+            console.log(list)
+        }
+
+        getList()
+    }, []);
     // const clickHandler = () => {
     //     console.log('button按钮点击了')
     // }
@@ -51,7 +65,7 @@ function App() {
     // 定义状态 count状态变量 setCount函数
     const [count1, setCount] = React.useState(0)
     const [count2, setCount2] = useState(0)
-    let [count3, setCount3] = useState(0)
+    let [count3] = useState(0)
     const handlerClickCount2 = () => {
         setCount2(count2 + 1)
     }
@@ -73,6 +87,26 @@ function App() {
         color: 'red',
         fontSize: '50px',
     }
+
+    //受控表单
+    const [inputValue, setInputValue] = useState('小猜')
+
+    //ref dom 通过获取DOM的方式获取表单的输入数据
+    const inputRef = useRef(null)
+    const showDom = () => {
+        console.log(inputRef.current.value)
+    }
+    const [msg, setMsg] = useState('')
+    const getMsg = (msg) => {
+        setMsg(msg)
+    }
+
+    const [aname, setAName] = useState('')
+    const getAName = (aname) => {
+        setAName(aname)
+    }
+
+    const msgContent = 'this is app msg'
     return (
         <div className="App">
             <h1>My First React App,Hello 小猜</h1>
@@ -121,8 +155,97 @@ function App() {
             <div style={{color: 'red', fontSize: '20px'}}>内联样式 {getName()}</div>
             <div style={style}>内联样式 {getName()}</div>
             <div className="foo">外联样式 {getName()}</div>
+            <br/>
+            <div>受控表单</div>
+            <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
+            {inputValue}
+            <br/>
+            <div>非受控表单</div>
+            <input type="text" ref={inputRef}/>
+            <button onClick={showDom}>获取dom</button>
+            <br/>
+            <div>父子组件</div>
+            <Son name={'小猜'}></Son>
+            <div>
+                <Son2><span>这是小猜</span></Son2>
+            </div>
+            <div>子传父</div>
+            <Son3 onGetMsg={getMsg}></Son3>{msg}
+            <div>兄弟组件</div>
+            <div>
+                this is App
+                <A onGetAName={getAName}/>
+                <B name={aname}/>
+            </div>
+            <br/>
+            <div>Context</div>
+            <div>
+                {/* 2. 在顶层组件 通过Provider组件提供数据 */}
+                <MsgContext.Provider value={msgContent}>
+                    this is App
+                    <AContent/>
+                </MsgContext.Provider>
+            </div>
         </div>
     );
+}
+
+function AContent() {
+    return (
+        <div>
+            this is A AContent
+            <BContent/>
+        </div>
+    )
+}
+
+function BContent() {
+    // 3. 在底层组件 通过useContext钩子函数使用数据
+    const msg = useContext(MsgContext)
+    return (
+        <div>
+            this is B BContent,{msg}
+        </div>
+    )
+}
+
+function A({onGetAName}) {
+    // Son组件中的数据
+    const name = 'this is A name'
+    return (
+        <div>
+            this is A compnent,
+            <button onClick={() => onGetAName(name)}>send</button>
+        </div>
+    )
+}
+
+function B({name}) {
+    return (
+        <div>
+            this is B compnent,
+            {name}
+        </div>
+    )
+}
+
+function Son(props) {
+    console.log(props)
+    return <div>我是{props.name}</div>
+}
+
+function Son2(props) {
+    return <div>我是{props.children}</div>
+}
+
+function Son3({onGetMsg}) {
+    const sonMsg = 'this is son msg'
+    return (
+        <div>
+            {/* 在子组件中执行父组件传递过来的函数 */}
+            <button onClick={() => onGetMsg(sonMsg)}>send</button>
+        </div>
+    )
 }
 
 export default App;
