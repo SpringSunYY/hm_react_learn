@@ -1388,5 +1388,110 @@ export default App
 ![image.png](./assets/day2_15.png)
 
 1. 使用请求接口的方式获取评论列表并渲染 
+
+   ```js
+   npm i json-server -D
+   ```
+
+   ```js
+   npm i axios
+   ```
+
+   ```react
+       "serve": "json-server db.json --port 3004"
+   ```
+
+   
+
+   ```react
+       const [list, setList] = useState([])
+       useEffect(() => {
+           // 请求数据
+           async function getList() {
+               const res = await axios.get('http://localhost:3004/list');
+               setList(res.data)
+           }
+   
+           getList()
+       }, []);
+   ```
+
 2. 使用自定义Hook函数封装数据请求的逻辑 
+
+   ```react
+   //封装请求数据的hook
+   function useGetList() {
+       const [list, setList] = useState([])
+       useEffect(() => {
+           // 请求数据
+           async function getList() {
+               const res = await axios.get('http://localhost:3004/list');
+               setList(res.data)
+           }
+   
+           getList()
+       }, []);
+       return [list, setList]
+   }
+   ```
+
+   ```react
+       const [list, setList] = useGetList()
+   ```
+
 3. 把评论中的每一项抽象成一个独立的组件实现渲染
+
+   ```react
+         {/* 评论列表 */}
+                   <div className="reply-list">
+                       {/* 评论项 */}
+                       {list.map(item => (
+                           <Item key={item.rpid} item={item} onDel={onDelete}/>
+                       ))}
+                   </div>
+   ```
+
+   ```react
+   //封装item组件
+   function Item({item,onDel}) {
+       return (
+           <div key={item.rpid} className="reply-item">
+               {/* 头像 */}
+               <div className="root-reply-avatar">
+                   <div className="bili-avatar">
+                       <img
+                           className="bili-avatar-img"
+                           alt=""
+                           src={item.user.avatar}/>
+                   </div>
+               </div>
+   
+               <div className="content-wrap">
+                   {/* 用户名 */}
+                   <div className="user-info">
+                       <div className="user-name">{item.user.uname}</div>
+                   </div>
+                   {/* 评论内容 */}
+                   <div className="root-reply">
+                       <span className="reply-content">{item.content}</span>
+                       <div className="reply-info">
+                           {/* 评论时间 */}
+                           <span className="reply-time">{item.ctime}</span>
+                           {/* 评论数量 */}
+                           <span className="reply-time">点赞数:{item.like}</span>
+                           {user.uid === item.user.uid && (
+                               <span
+                                   className="delete-btn"
+                                   onClick={() => onDel(item.rpid)}
+                               >删除</span>
+                           )}
+                       </div>
+                   </div>
+               </div>
+           </div>
+       )
+   }
+   ```
+
+   
+

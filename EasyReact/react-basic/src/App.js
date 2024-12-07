@@ -39,7 +39,21 @@ const MsgContext = createContext()
 
 const URL = 'http://geek.itheima.net/v1_0/channels'
 
+function useToggle() {
+    //可复用逻辑代码
+    //自定义hook
+    const [hookValue, setHookValue] = useState(true)
+    const toggle = () => {
+        setHookValue(!hookValue)
+    }
+    //哪些状态和回调函数需要使用就返回
+    return [hookValue, toggle]
+}
+
 function App() {
+    //自定义hook
+    const [hookValue, setHookValue] = useState(true)
+    const [toggleValue, toggle] = useToggle();
     useEffect(() => {
         //获取频道列表
         async function getList() {
@@ -106,9 +120,18 @@ function App() {
         setAName(aname)
     }
 
+
     const msgContent = 'this is app msg'
     return (
         <div className="App">
+            <div>自定义hook</div>
+            {toggleValue && <div>toggleValue</div>}
+            <button onClick={() => toggle()}>toggleValue</button>
+
+            {hookValue && <div>hookValue</div>}
+            <button onClick={() => setHookValue(!hookValue)}>hookValue</button>
+            <br/>
+
             <h1>My First React App,Hello 小猜</h1>
             {`小猜小猜`}{xc}
             <div style={{color: "red"}}>{getName()}</div>
