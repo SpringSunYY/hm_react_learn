@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="08325bbd-e2b9-4142-a843-38c2f0ad2102" name="Changes" comment="初始redux">
-      <change afterPath="$PROJECT_DIR$/../redux-meituan/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-    </list>
+    <list default="true" id="08325bbd-e2b9-4142-a843-38c2f0ad2102" name="Changes" comment="初始redux" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -105,7 +101,7 @@
       <updated>1733557025606</updated>
       <workItem from="1733557028715" duration="2715000" />
       <workItem from="1733644461688" duration="1100000" />
-      <workItem from="1733649148728" duration="925000" />
+      <workItem from="1733649148728" duration="926000" />
     </task>
     <task id="LOCAL-00001" summary="初始redux">
       <option name="closed" value="true" />
