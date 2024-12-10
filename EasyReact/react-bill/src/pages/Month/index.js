@@ -28,6 +28,7 @@ const Month = () => {
 
   const monthResult = useMemo(() => {
     // 支出  /  收入  / 结余
+    const currentMonthList = monthGroup[currentDate] || []
     const pay = currentMonthList.filter(item => item.type === 'pay').reduce((a, c) => a + c.money, 0)
     const income = currentMonthList.filter(item => item.type === 'income').reduce((a, c) => a + c.money, 0)
     return {
@@ -35,8 +36,7 @@ const Month = () => {
       income,
       total: pay + income
     }
-
-  }, [currentMonthList])
+  }, [monthGroup, currentDate])
 
   // 初始化的时候把当前月的统计数据显示出来
   useEffect(() => {
@@ -118,7 +118,6 @@ const Month = () => {
             return <DailyBill key={key} date={key} billList={dayGroup.groupData[key]} />
           })
         }
-
       </div>
     </div >
   )

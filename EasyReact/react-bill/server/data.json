@@ -205,6 +205,107 @@
       "money": 1110,
       "useFor": "bonus",
       "id": 39
+    },
+    {
+      "type": "pay",
+      "money": 0,
+      "useFor": "",
+      "id": 40
+    },
+    {
+      "type": "pay",
+      "money": -110,
+      "useFor": "",
+      "id": 41
+    },
+    {
+      "type": "income",
+      "money": 1110,
+      "useFor": "cashgift",
+      "id": 42
+    },
+    {
+      "type": "income",
+      "money": 1110,
+      "useFor": "cashgift",
+      "id": 43
+    },
+    {
+      "type": "income",
+      "money": 1110,
+      "useFor": "cashgift",
+      "id": 44
+    },
+    {
+      "type": "income",
+      "money": 1110,
+      "useFor": "cashgift",
+      "id": 45
+    },
+    {
+      "type": "income",
+      "money": 1110,
+      "useFor": "cashgift",
+      "id": 46
+    },
+    {
+      "type": "income",
+      "money": 1110,
+      "useFor": "cashgift",
+      "id": 47
+    },
+    {
+      "type": "income",
+      "money": 1110,
+      "useFor": "cashgift",
+      "id": 48
+    },
+    {
+      "type": "income",
+      "money": 1110,
+      "useFor": "cashgift",
+      "id": 49
+    },
+    {
+      "type": "income",
+      "money": 1110,
+      "useFor": "cashgift",
+      "id": 50
+    },
+    {
+      "type": "pay",
+      "money": -4000,
+      "date": "2024-12-08T16:00:00.000Z",
+      "useFor": "",
+      "id": 51
+    },
+    {
+      "type": "pay",
+      "money": -10000,
+      "date": "2024-12-08T16:00:00.000Z",
+      "useFor": "dessert",
+      "id": 52
+    },
+    {
+      "type": "pay",
+      "money": -10000,
+      "date": "2024-12-08T16:00:00.000Z",
+      "useFor": "food",
+      "id": 53
+    },
+    {
+      "type": "income",
+      "money": 100000,
+      "date": "2024-12-08T16:00:00.000Z",
+      "useFor": "salary",
+      "id": 54
+    },
+    {
+      "type": "income",
+      "money": 1000000,
+      "date": "2024-12-08T16:00:00.000Z",
+      "useFor": "financial",
+      "id": 55
     }
   ]
 }
