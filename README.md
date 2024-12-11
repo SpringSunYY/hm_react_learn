@@ -4124,7 +4124,7 @@ export default router
 ```jsx
 import './index.scss'
 import { Card, Form, Input, Button } from 'antd'
-import logo from '@/./assets/day6_logo.png'
+import logo from '@/assets/logo.png'
 
 const Login = () => {
   return (
@@ -4400,6 +4400,12 @@ const Login = () => {
 
 export default Login
 ```
+
+![image-20241211171532654](./assets/image-20241211171532654.png)
+
+13800000002
+
+246810
 
 ### token持久化
 
