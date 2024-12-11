@@ -4416,25 +4416,26 @@ export default Login
 ```javascript
 // 封装存取方法
 
-const TOKENKEY = 'token_key'
+const TOKEN_KEY = 'token_key'
 
 function setToken (token) {
-  return localStorage.setItem(TOKENKEY, token)
+    return localStorage.setItem(TOKEN_KEY, token)
 }
 
 function getToken () {
-  return localStorage.getItem(TOKENKEY)
+    return localStorage.getItem(TOKEN_KEY)
 }
 
-function clearToken () {
-  return localStorage.removeItem(TOKENKEY)
+function removeToken() {
+    return localStorage.removeItem(TOKEN_KEY)
 }
 
 export {
-  setToken,
-  getToken,
-  clearToken
+    setToken,
+    getToken,
+    removeToken
 }
+
 ```
 
 #### 实现持久化逻辑
