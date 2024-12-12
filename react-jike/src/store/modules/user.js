@@ -1,11 +1,12 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {getToken, request, setToken as _setToken} from '@/utils'
+import {getToken, removeToken, request, setToken as _setToken} from '@/utils'
 
 const userStore = createSlice({
     name: "user",
     //数据状态
     initialState: {
-        token: getToken() || ''
+        token: getToken() || '',
+        userInfo: {}
     },
     //修改数据的方法
     reducers: {
@@ -13,6 +14,14 @@ const userStore = createSlice({
             state.token = action.payload
             // 存入本地
             _setToken(state.token)
+        },
+        setUserInfo(state, action) {
+            state.userInfo = action.payload
+        },
+        clearUserInfo(state){
+            state.token = ''
+            state.userInfo = {}
+            removeToken()
         }
     }
 });
@@ -25,10 +34,16 @@ const fetchLogin = (loginForm) => {
         dispatch(setToken(res.data.token));
     }
 }
+const fetchUserInfo = () => {
+    return async (dispatch) => {
+        const res = await request('/user/profile');
+        dispatch(setUserInfo(res.data));
+    }
+}
 
-const {setToken} = userStore.actions;
+const {setToken, setUserInfo,clearUserInfo} = userStore.actions;
 
 //暴露方法
 const userReducer = userStore.reducer;
-export {setToken, fetchLogin};
+export {setToken, fetchLogin, fetchUserInfo,clearUserInfo};
 export default userReducer;
