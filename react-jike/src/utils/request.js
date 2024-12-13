@@ -1,5 +1,6 @@
 import axios from "axios";
-import {getToken} from "@/utils/token";
+import {getToken, removeToken} from "@/utils/token";
+import router from "@/router";
 
 const request = axios.create({
     baseURL: 'http://geek.itheima.net/v1_0',
@@ -15,6 +16,13 @@ request.interceptors.request.use((config) => {
     }
     return config
 }, (error) => {
+    // 监控token是否失效
+    if (error.response.status === 401) {
+        //跳转到登录页面
+        removeToken()
+        router.navigate('/login')
+        window.location.reload()
+    }
     return Promise.reject(error)
 })
 
