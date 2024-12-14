@@ -5795,7 +5795,7 @@ export default Article
 // 导入资源
 import { Table, Tag, Space } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
-import img404 from '@/./assets/day6_error.png'
+import img404 from '@/./assets/error.png'
 
 const Article = () => {
   // 准备列数据
