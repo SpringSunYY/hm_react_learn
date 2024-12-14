@@ -8,9 +8,9 @@ import store from './store'
 import 'normalize.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-        <Provider store={store}>
+    <Provider store={store}>
             <RouterProvider router={router} future={{
                 v7_skipActionErrorRevalidation: true,
             }}/>
-        </Provider>
+    </Provider>
 )

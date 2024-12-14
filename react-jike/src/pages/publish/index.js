@@ -4,7 +4,7 @@ import {Link, useSearchParams} from 'react-router-dom'
 import './index.scss'
 import 'react-quill/dist/quill.snow.css'
 import {useEffect, useState} from 'react'
-import {createArticleAPI, getArticleById, getChannelAPI, updateArticleAPI} from '@/apis/article'
+import {createArticleAPI, getArticleById, updateArticleAPI} from '@/apis/article'
 import MyAiEditor from "@/components/MyAiEditor";
 import {useChannel} from "@/hooks/useChannel";
 
@@ -107,15 +107,16 @@ const Publish = () => {
     //     getChannelList()
     // }, []);
     // 获取频道列表
-    const { channelList } = useChannel()
+    const {channelList} = useChannel()
     return (
         <div className="publish">
             <Card
                 title={
                     <Breadcrumb items={[
                         {title: <Link to={'/'}>首页</Link>},
-                        {title: '发布文章'},
-                    ]}/>
+                        {title: `${articleId ? '编辑文章' : '发布文章'}`},
+                    ]}
+                    />
                 }
             >
                 <Form

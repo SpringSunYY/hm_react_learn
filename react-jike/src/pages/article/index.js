@@ -1,5 +1,5 @@
-import {Link} from 'react-router-dom'
-import {Card, Breadcrumb, Form, Button, Radio, DatePicker, Select} from 'antd'
+import {Link, useNavigate} from 'react-router-dom'
+import {Card, Breadcrumb, Form, Button, Radio, DatePicker, Select, Popconfirm} from 'antd'
 //时间选择器汉化
 import locale from 'antd/es/date-picker/locale/zh_CN'
 
@@ -9,12 +9,13 @@ import {EditOutlined, DeleteOutlined} from '@ant-design/icons'
 import img404 from '@/./assets/error.png'
 import {useChannel} from "@/hooks/useChannel";
 import {useEffect, useState} from "react";
-import {getArticleListAPI} from "@/apis/article";
+import {delArticleAPI, getArticleListAPI} from "@/apis/article";
 
 const {Option} = Select
 const {RangePicker} = DatePicker
 
 const Article = () => {
+    const navigate = useNavigate()
     // 准备列数据
     // 定义状态枚举
     const status = {
@@ -63,13 +64,22 @@ const Article = () => {
             render: data => {
                 return (
                     <Space size="middle">
-                        <Button type="primary" shape="circle" icon={<EditOutlined/>}/>
-                        <Button
-                            type="primary"
-                            danger
-                            shape="circle"
-                            icon={<DeleteOutlined/>}
-                        />
+                        <Button type="primary" shape="circle" icon={<EditOutlined/>}
+                                onClick={() => navigate(`/publish?id=${data.id}`)}/>
+                        <Popconfirm
+                            title="删除文章"
+                            description="确认要删除当前文章吗?"
+                            onConfirm={() => onConfirm(data)}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button
+                                type="primary"
+                                danger
+                                shape="circle"
+                                icon={<DeleteOutlined/>}
+                            />
+                        </Popconfirm>
                     </Space>
                 )
             }
@@ -138,6 +148,15 @@ const Article = () => {
         setReqData({
             ...reqData,
             page
+        })
+    }
+
+    // 删除
+    const onConfirm = async (data) => {
+        console.log('删除点击了', data)
+        await delArticleAPI(data.id)
+        setReqData({
+            ...reqData
         })
     }
     return (
