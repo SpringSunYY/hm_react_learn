@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.snow.css'
 import {useEffect, useState} from 'react'
 import {createArticleAPI, getArticleById, getChannelAPI, updateArticleAPI} from '@/apis/article'
 import MyAiEditor from "@/components/MyAiEditor";
+import {useChannel} from "@/hooks/useChannel";
 
 const {Option} = Select
 
@@ -16,7 +17,7 @@ const Publish = () => {
         console.log(formValue)
         // 校验封面类型imageType是否和实际的图片列表imageList数量是相等的
         if (imageList.length !== imageType) return message.warning('封面类型和图片数量不匹配')
-        const { title, content, channel_id } = formValue
+        const {title, content, channel_id} = formValue
         // 1. 按照接口文档的格式处理收集到的表单数据
         const reqData = {
             title,
@@ -39,7 +40,7 @@ const Publish = () => {
         // 处理调用不同的接口 新增 - 新增接口  编辑状态 - 更新接口  id
         if (articleId) {
             // 更新接口
-            updateArticleAPI({ ...reqData, id: articleId })
+            updateArticleAPI({...reqData, id: articleId})
             console.log('成功更新')
         } else {
             for (let i = 0; i < 1000; i++) {
@@ -70,10 +71,10 @@ const Publish = () => {
     const [form] = Form.useForm()
     useEffect(() => {
         // 1. 通过id获取数据
-        async function getArticleDetail () {
+        async function getArticleDetail() {
             const res = await getArticleById(articleId)
             const data = res.data
-            const { cover } = data
+            const {cover} = data
             form.setFieldsValue({
                 ...data,
                 type: cover.type
@@ -85,9 +86,10 @@ const Publish = () => {
             setImageType(cover.type)
             // 显示图片({url:url})
             setImageList(cover.images.map(url => {
-                return { url }
+                return {url}
             }))
         }
+
         // 只有有id的时候才能调用此函数回填
         if (articleId) {
             getArticleDetail()
@@ -95,15 +97,17 @@ const Publish = () => {
         // 2. 调用实例方法 完成回填
     }, [articleId, form])
 
-    const [channelList, setChannelList] = useState([]);
-    useEffect(() => {
-        // 获取频道列表
-        const getChannelList = async () => {
-            const res = await getChannelAPI()
-            setChannelList(res.data.channels);
-        }
-        getChannelList()
-    }, []);
+    // const [channelList, setChannelList] = useState([]);
+    // useEffect(() => {
+    //     // 获取频道列表
+    //     const getChannelList = async () => {
+    //         const res = await getChannelAPI()
+    //         setChannelList(res.data.channels);
+    //     }
+    //     getChannelList()
+    // }, []);
+    // 获取频道列表
+    const { channelList } = useChannel()
     return (
         <div className="publish">
             <Card
