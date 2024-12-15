@@ -8,7 +8,7 @@ const Input = memo(function Input ({ onChange }) {
   return <input type="text" onChange={(e) => onChange(e.target.value)} />
 })
 
-function App () {
+function UseCallback () {
   // 传给子组件的函数
   const changeHandler = useCallback((value) => console.log(value), [])
   // 触发父组件重新渲染的函数
@@ -22,4 +22,4 @@ function App () {
   )
 }
 
-export default App
+export default UseCallback
