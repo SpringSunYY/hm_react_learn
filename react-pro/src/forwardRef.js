@@ -11,7 +11,7 @@ const Son = forwardRef((props, ref) => {
 
 
 // 父组件
-function App () {
+function ForwardRef () {
   const sonRef = useRef(null)
   const showRef = () => {
     console.log(sonRef)
@@ -25,4 +25,4 @@ function App () {
   )
 }
 
-export default App
+export default ForwardRef

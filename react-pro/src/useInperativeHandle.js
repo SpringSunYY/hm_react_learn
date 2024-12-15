@@ -21,7 +21,7 @@ const Son = forwardRef((props, ref) => {
 
 
 // 父组件
-function App () {
+function UseInperativeHandle () {
   const sonRef = useRef(null)
   const focusHandler = () => {
     console.log(sonRef.current)
@@ -35,4 +35,4 @@ function App () {
   )
 }
 
-export default App
+export default UseInperativeHandle
