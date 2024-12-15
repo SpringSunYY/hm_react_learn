@@ -16,10 +16,10 @@ const MemoSon = memo(function Son () {
 //   return <div>this is son</div>
 // }
 
-function App () {
+function Memo () {
   const [count, setCount] = useState(0)
   return (
-    <div className="App">
+    <div className="Memo">
       <button onClick={() => setCount(count + 1)}>+{count}</button>
       {/* <Son /> */}
       <MemoSon />
@@ -27,4 +27,4 @@ function App () {
   )
 }
 
-export default App
+export default Memo

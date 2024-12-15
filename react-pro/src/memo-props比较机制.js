@@ -14,7 +14,7 @@ const MemoSon = memo(function Son ({ list }) {
 })
 
 
-function App () {
+function MemoProps () {
   const [count, setCount] = useState(0)
 
   // const num = 100
@@ -24,11 +24,11 @@ function App () {
   }, [])
 
   return (
-    <div className="App">
+    <div className="MemoProps">
       <MemoSon list={list} />
       <button onClick={() => setCount(count + 1)}>change Count</button>
     </div>
   )
 }
 
-export default App
+export default MemoProps
