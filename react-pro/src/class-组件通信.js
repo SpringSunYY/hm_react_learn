@@ -36,7 +36,7 @@ class Parent extends Component {
 }
 
 
-function App () {
+function ClassApiT () {
   return (
     <>
       <Parent />
@@ -44,4 +44,4 @@ function App () {
   )
 }
 
-export default App
+export default ClassApiT

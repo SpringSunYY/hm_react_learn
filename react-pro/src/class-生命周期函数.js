@@ -25,7 +25,7 @@ class Son extends Component {
   }
 }
 
-function App () {
+function ClassApiS () {
   const [show, setShow] = useState(true)
   return (
     <>
@@ -35,4 +35,4 @@ function App () {
   )
 }
 
-export default App
+export default ClassApiS

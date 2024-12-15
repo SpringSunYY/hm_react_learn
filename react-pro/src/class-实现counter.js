@@ -24,7 +24,7 @@ class Counter extends Component {
 }
 
 
-function App () {
+function ClassApi () {
   return (
     <>
       <Counter />
@@ -32,4 +32,4 @@ function App () {
   )
 }
 
-export default App
+export default ClassApi
