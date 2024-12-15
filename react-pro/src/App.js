@@ -8,6 +8,9 @@ import UseInperativeHandle from "./useInperativeHandle";
 import ClassApi from "./class-实现counter";
 import ClassApiS from "./class-生命周期函数";
 import ClassApiT from "./class-组件通信";
+import Zustand from "./zustand-基础使用";
+import ZustandY from "./zustand-异步支持";
+import ZustandQ from "./zustand-切片模式";
 
 function App() {
 
@@ -23,6 +26,9 @@ function App() {
             <ClassApi/>{/*ClassApi*/}
             <ClassApiS/>{/*ClassApi生命周期*/}
             <ClassApiT/>{/*ClassApi组件通信*/}
+            <Zustand/>{/*Zustand基础使用*/}
+            <ZustandY/>{/*Zustand异步支持*/}
+            <ZustandQ/>{/*Zustand切片模式*/}
         </>
     )
 }

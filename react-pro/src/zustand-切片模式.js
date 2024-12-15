@@ -4,8 +4,8 @@ import { create } from 'zustand'
 const URL = 'http://geek.itheima.net/v1_0/channels'
 
 // store
-// counterStore  
-// channelStore 
+// counterStore
+// channelStore
 // index.js
 
 // 1. 拆分子模块 再组合起来
@@ -43,7 +43,7 @@ const useStore = create((...a) => {
 })
 
 
-function App () {
+function ZustandQ () {
   // 2. 组件使用
   const { count, inc, fetchGetList, channelList } = useStore()
   useEffect(() => {
@@ -61,4 +61,4 @@ function App () {
   )
 }
 
-export default App
+export default ZustandQ
