@@ -7414,3 +7414,787 @@ function App(){
 }
 ```
 
+
+
+# TS-项目
+
+## 初始化项目
+
+```bash
+npm create vite@latest react-jike-mobile -- --template react-ts
+```
+
+### 安装依赖包
+
+```bash
+npm i 
+```
+
+### 清理项目目录结构
+
+![image.png](./assets/day_12_01.png)
+
+## 安装 antd-mobile
+
+```bash
+npm install --save antd-mobile
+```
+
+### 测试组件
+
+```bash
+import { Button } from 'antd-mobile'
+
+function App() {
+  return (
+    <>
+      <Button>click me </Button>
+    </>
+  )
+}
+
+export default App
+```
+
+## 初始化路由
+
+### 安装路由
+
+```bash
+npm i react-router-dom
+```
+
+### 配置基础路由
+
+```tsx
+const List = () => {
+  return <div>this is List</div>
+}
+
+export default List
+```
+
+```tsx
+const Detail = () => {
+  return <div>this is Detail</div>
+}
+
+export default Detail
+```
+
+```tsx
+import { createBrowserRouter } from 'react-router-dom'
+import List from '../pages/List'
+import Detail from '../pages/Detail'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <List />,
+  },
+  {
+    path: '/detail',
+    element: <Detail />,
+  },
+])
+
+export default router
+```
+
+```tsx
+import ReactDOM from 'react-dom/client'
+import { RouterProvider } from 'react-router-dom'
+import router from './router/index.tsx'
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <RouterProvider router={router} />
+)
+```
+
+## 配置路径别名
+
+### 修改vite配置
+
+```javascript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+})
+
+```
+
+### 安装node类型包
+
+```bash
+npm i @types/node -D
+```
+
+### 修改tsconfig.json文件
+
+```json
+{
+  "baseUrl": ".",
+  "paths": {
+    "@/*": [
+      "src/*"
+    ]
+  },
+}
+```
+
+## axios安装配置
+
+### 安装axios
+
+```bash
+npm i axios
+```
+
+### 简易封装
+
+```typescript
+import axios from 'axios'
+
+const requestInstance = axios.create({
+  baseURL: 'http://geek.itheima.net/v1_0',
+  timeout: 5000,
+})
+
+requestInstance.interceptors.request.use(
+  (config) => {
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
+requestInstance.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
+export default requestInstance
+```
+
+```typescript
+import requestInstance from './http'
+
+export { requestInstance as http }
+```
+
+## API模块测试使用
+
+![无标题-2023-11-04-1803.png](./assets/day_12_2.png)
+
+### 封装泛型
+
+[获取-所有频道列表 - 黑马前端](https://apifox.com/apidoc/shared-fa9274ac-362e-4905-806b-6135df6aa90e/api-23348775)
+
+```typescript
+export type ResType<T> = {
+  message: string
+  data: T
+}
+```
+
+### 封装请求函数
+
+```tsx
+import { http } from '@/utils'
+import type { ResType } from './shared'
+
+type ChannelRes = {
+  channels: { id: number; name: string }[]
+}
+
+export function fetchChannelAPI() {
+  return http.request<ResType<ChannelRes>>({
+    url: '/channels',
+  })
+}
+```
+
+### 测试API函数
+
+```typescript
+fetchChannelAPI().then((res) => {
+  console.log(res.data.data.channels)
+})
+```
+
+
+
+## 整体结构设计
+
+![image.png](./assets/day_12_3.png)
+
+### 准备Home入口组件
+
+```tsx
+import './style.css'
+
+const Home = () => {
+  return (
+    <div>Home</div>
+  )
+}
+
+export default Home
+```
+
+### 准备配套样式
+
+```css
+.tabContainer {
+  position: fixed;
+  height: 50px;
+  top: 0;
+  width: 100%;
+}
+
+.listContainer {
+  position: fixed;
+  top: 50px;
+  bottom: 0px;
+  width: 100%;
+}
+```
+
+## Tabs模块实现
+
+![image.png](./assets/day_12_4.png)
+
+### 准备结构
+
+```tsx
+import { Tabs } from 'antd-mobile'
+import './style.css'
+
+const Home = () => {
+  return (
+    <div className="tabContainer">
+       <Tabs defaultActiveKey="0">
+          <Tabs.Tab title='abc' key='0'>
+            <div className="listContainer">
+               {/* HomeList列表 */}
+            </div>
+          </Tabs.Tab>
+      </Tabs>
+      {/*
+        <Tabs>
+         <Tabs.Tab title='水果' key='fruits'>
+            菠萝
+          </Tabs.Tab>
+          <Tabs.Tab title='蔬菜' key='vegetables'>
+            西红柿
+          </Tabs.Tab>
+          <Tabs.Tab title='动物' key='animals'>
+            蚂蚁
+          </Tabs.Tab>
+        </Tabs>
+       */
+      }
+    </div>
+  )
+}
+
+export default Home
+```
+
+### 封装接口和类型
+
+```typescript
+import { http } from '@/utils'
+import type { ResType } from './shared'
+
+export type ChannelItem = {
+  id: string
+  name: string
+}
+
+type ChannelRes = {
+  channels: ChannelItem[]
+}
+
+export function fetchChannelAPI() {
+  return http.request<ResType<ChannelRes>>({
+    url: '/channels',
+  })
+}
+```
+
+### 封装数据请求hook
+
+```typescript
+import { fetchChannelAPI } from '@/apis/list'
+import type { ChannelItem } from '@/apis/list'
+import { useEffect, useState } from 'react'
+
+function useFetchChannels() {
+  const [channels, setChannels] = useState<ChannelItem[]>([])
+  useEffect(() => {
+    async function getChannels() {
+      try {
+        const { data } = await fetchChannelAPI()
+        setChannels(data.data.channels)
+      } catch (error) {
+        throw new Error('fetch channels error')
+      }
+    }
+    getChannels()
+  }, [])
+  return {
+    channels,
+  }
+}
+
+export { useFetchChannels }
+```
+
+### 调用hook渲染数据
+
+```tsx
+import { Tabs } from 'antd-mobile'
+import HomeList from './HomeList'
+import { useFetchChannels } from './useFetchChannels'
+
+import './style.css'
+
+const Home = () => {
+  const { channels } = useFetchChannels()
+
+  return (
+    <Tabs defaultActiveKey="0">
+      {channels.map((item) => (
+        <Tabs.Tab title={item.name} key={item.id}>
+          <div className="listContainer">
+             {/* HomeList列表 */}
+          </div>
+        </Tabs.Tab>
+      ))}
+    </Tabs>
+  )
+}
+
+export default Home
+```
+
+## List模块实现-渲染基础数据
+
+### 准备基础结构
+
+```tsx
+import { Image, List } from 'antd-mobile'
+// mock数据
+import { users } from './users'
+
+const HomeList = () => {
+  return (
+    <>
+      <List>
+        {users.map((item) => (
+          <List.Item
+            key={item.id}
+            prefix={
+              <Image
+                src={item.avatar}
+                style={{ borderRadius: 20 }}
+                fit="cover"
+                width={40}
+                height={40}
+              />
+            }
+            description={item.description}
+            >
+            {item.name}
+          </List.Item>
+        ))}
+      </List>
+    </>
+  )
+}
+
+export default HomeList
+```
+
+```typescript
+export const users = [
+  {
+    id: '1',
+    avatar:
+      'https://images.unsplash.com/photo-1548532928-b34e3be62fc6?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ',
+    name: 'Novalee Spicer',
+    description: 'Deserunt dolor ea eaque eos',
+  },
+  {
+    id: '2',
+    avatar:
+      'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9',
+    name: 'Sara Koivisto',
+    description: 'Animi eius expedita, explicabo',
+  },
+  {
+    id: '3',
+    avatar:
+      'https://images.unsplash.com/photo-1542624937-8d1e9f53c1b9?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ',
+    name: 'Marco Gregg',
+    description: 'Ab animi cumque eveniet ex harum nam odio omnis',
+  },
+  {
+    id: '4',
+    avatar:
+      'https://images.unsplash.com/photo-1546967191-fdfb13ed6b1e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ',
+    name: 'Edith Koenig',
+    description: 'Commodi earum exercitationem id numquam vitae',
+  },
+]
+```
+
+### 封装请求API
+
+```typescript
+export type ListParams = {
+  channel_id: string
+  timestamp: string
+}
+
+type ListItem = {
+  art_id: string
+  title: string
+  aut_id: string
+  comm_count: number
+  pubdate: string
+  aut_name: string
+  is_top: 0 | 1
+  cover: {
+    type: 0 | 1 | 3
+    images: string[]
+  }
+}
+
+export type ListRes = {
+  results: ListItem[]
+  pre_timestamp: string
+}
+
+export function fetchListAPI(params: ListParams) {
+  return http.request<ResType<ListRes>>({
+    url: '/articles',
+    params,
+  })
+}
+```
+
+### 获取渲染基础列表数据
+
+```tsx
+import { ListRes, fetchListAPI } from '@/apis/list'
+import { Image, List } from 'antd-mobile'
+import { useState, useEffect } from 'react'
+
+const HomeList = (props: Props) => {
+  const { channelId } = props
+  // list control
+  const [listRes, setListRes] = useState<ListRes>({
+    results: [],
+    pre_timestamp: '' + new Date().getTime(),
+  })
+  // 初始数据获取
+  useEffect(() => {
+    async function getList() {
+      try {
+        const res = await fetchListAPI({
+          channel_id: '0',
+          timestamp: '' + new Date().getTime(),
+        })
+        setListRes(res.data.data)
+      } catch (error) {
+        throw new Error('fetch list error')
+      }
+    }
+    getList()
+  }, [])
+
+  return (
+    <>
+      <List>
+        {listRes.results.map((item) => (
+          <List.Item
+            key={item.art_id}
+            prefix={
+              <Image
+                src={item.cover.images?.[0]}
+                style={{ borderRadius: 20 }}
+                fit="cover"
+                width={40}
+                height={40}
+              />
+            }
+            description={item.pubdate}>
+            >
+            {item.title}
+          </List.Item>
+        ))}
+      </List>
+    </>
+  )
+}
+
+export default HomeList
+```
+
+## List模块实现-传入不同channelId
+
+### 设计组件props
+
+```tsx
+import { ListRes, fetchListAPI } from '@/apis/list'
+import { Image, List, InfiniteScroll } from 'antd-mobile'
+import { useState, useEffect } from 'react'
+
+type Props = {
+  channelId: string
+}
+
+const HomeList = (props: Props) => {
+  const { channelId } = props
+  // list control
+  const [listRes, setListRes] = useState<ListRes>({
+    results: [],
+    pre_timestamp: '' + new Date().getTime(),
+  })
+  // 初始数据获取
+  useEffect(() => {
+    async function getList() {
+      try {
+        const res = await fetchListAPI({
+          channel_id: channelId,
+          timestamp: '' + new Date().getTime(),
+        })
+        setListRes(res.data.data)
+      } catch (error) {
+        throw new Error('fetch list error')
+      }
+    }
+    getList()
+  }, [channelId])
+  
+  return (
+    <>
+      <List>
+        {listRes.results.map((item) => (
+          <List.Item
+            key={item.art_id}
+            prefix={
+              <Image
+                src={item.cover.images?.[0]}
+                style={{ borderRadius: 20 }}
+                fit="cover"
+                width={40}
+                height={40}
+              />
+            }>
+            {item.title}
+          </List.Item>
+        ))}
+      </List>
+    </>
+  )
+}
+
+export default HomeList
+```
+
+### 组件传入不同channelId
+
+```tsx
+<Tabs.Tab title={item.name} key={item.id}>
+  {/* list组件 */}
+  <HomeList channelId={'' + item.id} />
+</Tabs.Tab>
+```
+
+## List模块无限加载实现
+
+### 确保滑动结构
+
+```tsx
+<div className="listContainer">
+   {/* HomeList列表 */}
+</div>
+```
+
+### 2.实现上拉逻辑
+
+```typescript
+import { ListRes, fetchListAPI } from '@/apis/list'
+import { Image, List, InfiniteScroll } from 'antd-mobile'
+import { useState, useEffect } from 'react'
+
+type Props = {
+  channelId: string
+}
+
+const HomeList = (props: Props) => {
+  const { channelId } = props
+  // list control
+  const [listRes, setListRes] = useState<ListRes>({
+    results: [],
+    pre_timestamp: '' + new Date().getTime(),
+  })
+  // 初始数据获取
+  useEffect(() => {
+    async function getList() {
+      try {
+        const res = await fetchListAPI({
+          channel_id: channelId,
+          timestamp: '' + new Date().getTime(),
+        })
+        setListRes(res.data.data)
+      } catch (error) {
+        throw new Error('fetch list error')
+      }
+    }
+    getList()
+  }, [channelId])
+
+  // 加载更多
+  const [hasMore, setHadMore] = useState(true)
+  const loadMore = async () => {
+    try {
+      const res = await fetchListAPI({
+        channel_id: channelId,
+        timestamp: listRes.pre_timestamp,
+      })
+      // 没有数据立刻停止
+      if (res.data.data.results.length === 0) {
+        setHadMore(false)
+      }
+      setListRes({
+        // 拼接新老列表数据
+        results: [...listRes.results, ...res.data.data.results],
+        // 重置时间参数 为下一次请求做准备
+        pre_timestamp: res.data.data.pre_timestamp,
+      })
+    } catch (error) {
+      throw new Error('load list error')
+    }
+  }
+  
+  return (
+    <>
+      <List>
+        {listRes.results.map((item) => (
+          <List.Item
+            key={item.art_id}
+            prefix={
+              <Image
+                src={item.cover.images?.[0]}
+                style={{ borderRadius: 20 }}
+                fit="cover"
+                width={40}
+                height={40}
+              />
+            }>
+            {item.title}
+          </List.Item>
+        ))}
+      </List>
+      <InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
+    </>
+  )
+}
+
+export default HomeList
+```
+
+
+
+## 路由跳转传参
+
+```tsx
+const navigateToDetail = (id: string) => {
+  navigate(`/detail?id=${id}`)
+}
+
+<List.Item
+  key={item.art_id}
+  onClick={() => navigateToDetail(item.art_id)}
+  arrow={false}
+>
+	{item.title}
+</List.Item>
+```
+
+## 获取详情数据
+
+```typescript
+import { http } from '@/utils'
+import { ResType } from './shared'
+
+export type DetailRes = {
+  art_id: string
+  title: string
+  pubdate: string
+  content: string
+}
+
+export function fetchDetailAPI(article_id: string) {
+  return http.request<ResType<DetailRes>>({
+    url: `/articles/${article_id}`,
+  })
+}
+```
+
+```tsx
+import { NavBar } from 'antd-mobile'
+import { useEffect, useState } from 'react'
+import { DetailRes, fetchDetailAPI } from '@/apis/detail'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+const Detail = () => {
+  const [detail, setDetail] = useState<DetailRes | null>(null)
+  const [params] = useSearchParams()
+  const id = params.get('id')
+  useEffect(() => {
+    async function getDetail() {
+      try {
+        const res = await fetchDetailAPI(id!)
+        setDetail(res.data.data)
+      } catch (error) {
+        throw new Error('fetch detail error')
+      }
+    }
+    if (id) {
+      getDetail()
+    }
+  }, [id])
+  const navigate = useNavigate()
+  const back = () => navigate(-1)
+
+  if (!detail) {
+    return <div>this is loading</div>
+  }
+  return (
+    <div>
+      <NavBar onBack={back}>{detail.title}</NavBar>
+      <div dangerouslySetInnerHTML={{ __html: detail.content }}></div>
+    </div>
+  )
+}
+
+export default Detail
+```
